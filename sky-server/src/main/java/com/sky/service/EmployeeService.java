@@ -50,5 +50,5 @@ public interface EmployeeService {
      * @param id
      * @return
      */
-    EmployeeDTO getById(Integer id);
+    EmployeeDTO getById(Long id);
 }

@@ -45,5 +45,5 @@ public interface EmployeeMapper {
     void update(Employee employee);
 
     @Select("select id,username,name,phone,sex,id_number from sky_take_out.employee where id = #{id}")
-    EmployeeDTO getById(Integer id);
+    EmployeeDTO getById(Long id);
 }

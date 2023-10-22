@@ -116,7 +116,7 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     @ApiOperation("根据id查询员工")
-    public Result<EmployeeDTO> getById(@PathVariable Integer id){
+    public Result<EmployeeDTO> getById(@PathVariable Long id){
        EmployeeDTO employeeDTO = employeeService.getById(id);
        return Result.success(employeeDTO);
     }

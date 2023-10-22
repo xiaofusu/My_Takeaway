@@ -146,7 +146,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return
      */
     @Override
-    public EmployeeDTO getById(Integer id) {
+    public EmployeeDTO getById(Long id) {
        EmployeeDTO employeeDTO =  employeeMapper.getById(id);
         return employeeDTO;
     }
