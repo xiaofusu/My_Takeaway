@@ -23,5 +23,22 @@ public interface CategoryService {
      */
     PageResult pageQuery(CategoryPageQueryDTO categoryPageQueryDTO);
 
+    /**
+     * 分类的禁用和启用
+     * @param status
+     * @param id
+     */
     void status(Integer status, Long id);
+
+    /**
+     * 修改分类
+     * @param categoryDTO
+     */
+    void update(CategoryDTO categoryDTO);
+
+    /**
+     * 根据id删除分类
+     * @param id
+     */
+    void deleteById(Long id);
 }

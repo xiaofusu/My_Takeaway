@@ -2,18 +2,25 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.entity.Employee;
+import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.CategoryMapper;
+import com.sky.mapper.DishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
+import com.sky.result.Result;
 import com.sky.service.CategoryService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,6 +34,10 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
+    @Autowired
+    private DishMapper dishMapper;
+    @Autowired
+    private SetmealMapper setmealMapper;
 
     /**
      * 新增员工
@@ -77,5 +88,42 @@ public class CategoryServiceImpl implements CategoryService {
                 .updateUser(BaseContext.getCurrentId())
                 .build();
         categoryMapper.update(category);
+    }
+
+    /**
+     * 修改分类
+     * @param categoryDTO
+     * @return
+     */
+    @Override
+    public void update(CategoryDTO categoryDTO) {
+        Category category = new Category();
+        BeanUtils.copyProperties(categoryDTO,category);
+        //设置修改时间和修改人
+        category.setUpdateUser(BaseContext.getCurrentId());
+        category.setUpdateTime(LocalDateTime.now());
+        categoryMapper.update(category);
+    }
+
+    /**
+     * 根据id删除分类
+     * @param id
+     */
+    @Override
+    public void deleteById(Long id) {
+        //判断当前分类下面是否关联了菜品 否则不能删除 抛出业务异常
+        Integer count = dishMapper.countByCategoryId(id);
+        if(count>0){
+            //当前分类下有菜品，不能删除
+            throw new DeletionNotAllowedException(MessageConstant.CATEGORY_BE_RELATED_BY_DISH);
+        }
+        //判断当前分类下是否有套餐 否则不能删除
+        Integer count1 = setmealMapper.countByCategoryId(id);
+        if(count1>0){
+            //当前分类下有套餐，不能删除
+            throw new DeletionNotAllowedException(MessageConstant.CATEGORY_BE_RELATED_BY_DISH);
+        }
+        categoryMapper.deleteById(id);
+
     }
 }

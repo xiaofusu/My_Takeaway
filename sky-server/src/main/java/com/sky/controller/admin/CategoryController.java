@@ -24,6 +24,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+
     /**
      * 新增分类
      * @param categoryDTO
@@ -58,6 +59,31 @@ public class CategoryController {
     @ApiOperation("分类状态修改")
     public Result status(@PathVariable Integer status,Long id){
         categoryService.status(status,id);
+        return Result.success();
+    }
+
+    /**
+     * 修改分类
+     * @param categoryDTO
+     * @return
+     */
+    @PutMapping
+    @ApiOperation("修改分类")
+    public Result<String> update(@RequestBody CategoryDTO categoryDTO){
+        categoryService.update(categoryDTO);
+        return Result.success();
+    }
+
+    /**
+     * 根据id删除分类 此时要判断这分类下面有没有菜品 否则不能删除
+     * @param id
+     * @return
+     */
+    @DeleteMapping
+    @ApiOperation("删除分类")
+    public Result delete(Long id){
+        log.info("删除分类：{}", id);
+        categoryService.deleteById(id);
         return Result.success();
     }
 }
