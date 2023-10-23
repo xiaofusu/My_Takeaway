@@ -8,19 +8,15 @@ import com.sky.context.BaseContext;
 import com.sky.dto.CategoryDTO;
 import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
-import com.sky.entity.Employee;
 import com.sky.exception.DeletionNotAllowedException;
 import com.sky.mapper.CategoryMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
-import com.sky.result.Result;
 import com.sky.service.CategoryService;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -125,5 +121,12 @@ public class CategoryServiceImpl implements CategoryService {
         }
         categoryMapper.deleteById(id);
 
+    }
+
+    @Override
+    public List<Category> list(Integer type) {
+        //select * from category where type = ？
+        List<Category> categoryList  = categoryMapper.list(type);
+        return categoryList;
     }
 }

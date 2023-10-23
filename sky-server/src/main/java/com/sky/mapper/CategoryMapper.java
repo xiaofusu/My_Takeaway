@@ -7,6 +7,9 @@ import com.sky.entity.Employee;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * @Author wzy
@@ -39,4 +42,12 @@ public interface CategoryMapper {
      */
     @Delete("delete from sky_take_out.category where id = #{id}")
     void deleteById(Long id);
+
+    /**
+     * 根据类型查询分类
+     * @param type
+     * @return
+     */
+    @Select("select *  from sky_take_out.category where type  = #{type}")
+    List<Category> list(Integer type);
 }
