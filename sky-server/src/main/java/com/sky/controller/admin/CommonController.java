@@ -49,30 +49,4 @@ public class CommonController {
         }
         return null;
     }
-//    /**
-//     * 文件下载
-//     * @param name
-//     * @param response
-//     */
-//    @GetMapping("/download")
-//    public void downLoad(String name, HttpServletResponse response){
-//
-//        try {
-//            //输入流，通过输入流读取文件
-//            FileInputStream fileInputStream = new FileInputStream(new File(basePath+name));
-//            //输出流，通过输出流将文件写回浏览器，在浏览器显示图片
-//            ServletOutputStream outputStream = response.getOutputStream();
-//            response.setContentType("image/jpg");
-//            int length = 0;
-//            byte[] bytes = new byte[1024];
-//            while((length=fileInputStream.read(bytes))!=-1){
-//                outputStream.write(bytes,0,length);
-//                outputStream.flush();
-//            }
-//            outputStream.close();
-//            fileInputStream.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 }
