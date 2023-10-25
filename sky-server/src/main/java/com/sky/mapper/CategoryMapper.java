@@ -54,4 +54,12 @@ public interface CategoryMapper {
      */
     @Select("select *  from sky_take_out.category where type  = #{type}")
     List<Category> list(Integer type);
+
+    /**
+     * 根据分类id查询分类名称
+     * @param categoryId
+     * @return
+     */
+    @Select("select name from sky_take_out.category where id = #{categoryId}")
+    String queryNameById(Long categoryId);
 }
