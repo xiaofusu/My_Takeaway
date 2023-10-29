@@ -106,4 +106,57 @@ public class DishServiceImpl implements DishService {
 
 
     }
+
+    /**
+     * 根据id查询菜品
+     * @param id
+     * @return
+     */
+    @Override
+    public DishVO getDishById(Long id) {
+        DishVO dishVO = new DishVO();
+        Dish dish = dishMapper.getById(id);
+        BeanUtils.copyProperties(dish,dishVO);
+        List<DishFlavor> byDishId = dishFlavorMapper.getByDishId(id);
+        dishVO.setFlavors(byDishId);
+        return dishVO;
+    }
+
+    /**
+     * 修改菜品以及修改对应的口味信息
+     * @param dishDTO
+     */
+    @Transactional
+    @Override
+    public void updateWithFlavor(DishDTO dishDTO) {
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO,dish);
+        //修改菜品基本信息
+        dishMapper.update(dish);
+        //删除对应菜品的口味表中的信息
+        dishFlavorMapper.deleteById(dishDTO.getId());
+        //重新插入对应的口味信息
+        List<DishFlavor> flavors = dishDTO.getFlavors();
+        if( !flavors.isEmpty()){
+            flavors.forEach(flavor->{
+                flavor.setDishId(dishDTO.getId());
+            });
+        }
+        dishFlavorMapper.insertBatch(flavors);
+
+    }
+
+    @Override
+    public void updateStatus(Integer status, Long id) {
+        Dish dish = Dish.builder()
+                .id(id)
+                .status(status).build();
+        dishMapper.update(dish);
+    }
+
+    @Override
+    public List<Dish> queryByCategoryId(Long categoryId) {
+        List<Dish> dishList = dishMapper.queryByCategoryId(categoryId);
+        return dishList;
+    }
 }
