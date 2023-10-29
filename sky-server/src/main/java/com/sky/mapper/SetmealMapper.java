@@ -1,6 +1,10 @@
 package com.sky.mapper;
 
+import com.sky.annotation.AutoFill;
+import com.sky.entity.Setmeal;
+import com.sky.enumeration.OperationType;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
 /**
@@ -19,4 +23,10 @@ public interface SetmealMapper {
     @Select("select count(id) from sky_take_out.setmeal where category_id = #{categoryId}")
     Integer countByCategoryId(Long id);
 
+    /**
+     * 新增套餐
+     * @param setmeal
+     */
+    @AutoFill(value = OperationType.INSERT)
+    void insert(Setmeal setmeal);
 }
