@@ -43,5 +43,17 @@ public class SetmealController {
         SetmealVO setmealVO = setmealService.getById(id);
         return Result.success(setmealVO);
     }
+    @PutMapping
+    @ApiOperation("修改套餐")
+    public Result updateSetmeal(@RequestBody SetmealDTO setmealDTO){
+        setmealService.updateSetmeal(setmealDTO);
+        return Result.success();
+    }
+    @PostMapping("status/{status}")
+    @ApiOperation("套餐停售和起售")
+    public Result status(@PathVariable Integer status,Long id){
+        setmealService.status(status,id);
+        return Result.success();
+    }
 
 }

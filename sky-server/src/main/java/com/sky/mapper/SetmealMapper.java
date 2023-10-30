@@ -41,10 +41,17 @@ public interface SetmealMapper {
     Page<SetmealVO> pageQuery(SetmealPageQueryDTO setmealPageQueryDTO);
 
     /**
-     * 根绝id获取taoc
+     * 根绝id获取套餐
      * @param id
      * @return
      */
     @Select("select * from sky_take_out.setmeal where id = #{id}")
     SetmealVO getById(Long id);
+
+    /**
+     * 修改菜品
+     * @param setmeal
+     */
+    @AutoFill(OperationType.UPDATE)
+    void update(Setmeal setmeal);
 }
