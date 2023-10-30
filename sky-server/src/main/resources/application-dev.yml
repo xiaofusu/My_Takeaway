@@ -11,3 +11,7 @@ sky:
     endpoint: oss-cn-hangzhou.aliyuncs.com
     bucket-name: wzy-sky-takeaway
     access-key-secret: qYGErcysNJ0QrMPEdQXADtyXUN2joX
+  redis:
+    host: 192.168.163.128
+    port: 6379
+    password: 295456
