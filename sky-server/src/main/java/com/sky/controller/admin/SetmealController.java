@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @Author wzy
  * @Date 2023/10/29 15:56
@@ -53,6 +55,12 @@ public class SetmealController {
     @ApiOperation("套餐停售和起售")
     public Result status(@PathVariable Integer status,Long id){
         setmealService.status(status,id);
+        return Result.success();
+    }
+    @DeleteMapping
+    @ApiOperation("批量删除套餐")
+    public Result delete(@RequestParam List<Long> ids){
+        setmealService.deleteBatch(ids);
         return Result.success();
     }
 

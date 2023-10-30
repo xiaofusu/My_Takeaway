@@ -9,10 +9,18 @@
                               #{dishId}
                          </foreach>
     </select>
+
     <insert id="insertBatch">
         insert into sky_take_out.setmeal_dish( setmeal_id, dish_id, name, price, copies) values
         <foreach collection="setmealDishes" item="setmealDish" separator=",">
             (#{setmealDish.setmealId},#{setmealDish.dishId},#{setmealDish.name},#{setmealDish.price},#{setmealDish.copies})
         </foreach>
     </insert>
+
+    <delete id="deleteBatch">
+        delete from sky_take_out.setmeal_dish where setmeal_id in
+        <foreach collection="setmealIds" item="setmealId" separator="," open="(" close=")">
+            #{setmealId}
+        </foreach>
+    </delete>
 </mapper>

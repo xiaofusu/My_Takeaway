@@ -40,5 +40,11 @@ public interface SetmealDishMapper {
 
     @Delete("delete from sky_take_out.setmeal_dish where setmeal_id = #{setmealId}")
     void deleteBySetmealId(Long setmealId);
+
+    /**
+     * 批量删除套餐对应的菜品信息
+     * @param setmealIds
+     */
+    void deleteBatch(List<Long> setmealIds);
 }
 

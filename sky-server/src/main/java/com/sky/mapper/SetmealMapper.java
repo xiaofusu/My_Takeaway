@@ -10,6 +10,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * @Author wzy
  * @Date 2023/10/22 21:35
@@ -54,4 +56,10 @@ public interface SetmealMapper {
      */
     @AutoFill(OperationType.UPDATE)
     void update(Setmeal setmeal);
+
+    /**
+     * 批量删除
+     * @param ids
+     */
+    void deleteBatch(List<Long> ids);
 }

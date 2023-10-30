@@ -5,6 +5,8 @@ import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.result.PageResult;
 import com.sky.vo.SetmealVO;
 
+import java.util.List;
+
 /**
  * @Author wzy
  * @Date 2023/10/29 15:59
@@ -43,4 +45,10 @@ public interface SetmealService {
      * @param id
      */
     void status(Integer status, Long id);
+
+    /**
+     * 批量删除套餐
+     * @param ids
+     */
+    void deleteBatch(List<Long> ids);
 }

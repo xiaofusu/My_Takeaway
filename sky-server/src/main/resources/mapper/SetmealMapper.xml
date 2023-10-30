@@ -9,6 +9,7 @@
                 #{updateTime},#{createUser},#{updateUser})
     </insert>
 
+
     <select id="pageQuery" resultType="com.sky.vo.SetmealVO">
         select s.*,c.name as categoryName from sky_take_out.setmeal s left outer join sky_take_out.category c on s.category_id = c.id
         <where>
@@ -54,4 +55,10 @@
         </set>
         where id = #{id}
     </update>
+    <delete id="deleteBatch">
+        delete from sky_take_out.setmeal where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>
