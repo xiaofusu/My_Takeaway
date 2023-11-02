@@ -75,4 +75,11 @@ public interface DishMapper {
      */
     @Select("select * from sky_take_out.dish where category_id = #{categoryId}")
     List<Dish> queryByCategoryId(Long categoryId);
+
+    /**
+     * 条件查询菜品
+     * @param dish
+     * @return
+     */
+    List<Dish> list(Dish dish);
 }

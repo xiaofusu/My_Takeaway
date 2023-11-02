@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author wzy
@@ -147,6 +148,11 @@ public class DishServiceImpl implements DishService {
 
     }
 
+    /**
+     * 菜品状态修改
+     * @param status
+     * @param id
+     */
     @Override
     public void updateStatus(Integer status, Long id) {
         Dish dish = Dish.builder()
@@ -155,9 +161,33 @@ public class DishServiceImpl implements DishService {
         dishMapper.update(dish);
     }
 
+    /**
+     * 根据分类id查询菜品
+     * @param categoryId
+     * @return
+     */
     @Override
     public List<Dish> queryByCategoryId(Long categoryId) {
         List<Dish> dishList = dishMapper.queryByCategoryId(categoryId);
         return dishList;
+    }
+
+    /**
+     * 条件查询菜品信息及其口味信息
+     * @param dish
+     * @return
+     */
+    @Override
+    public List<DishVO> listWithFlavor(Dish dish) {
+        List<Dish> dishList = dishMapper.list(dish);//条件查询菜品
+        List<DishVO> dishVOList = dishList.stream().map(dish1 -> {
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(dish1, dishVO);
+            Long dish1Id = dish1.getId();//菜品id
+            List<DishFlavor> dishFlavorList = dishFlavorMapper.getByDishId(dish1Id);
+            dishVO.setFlavors(dishFlavorList);
+            return dishVO;
+        }).collect(Collectors.toList());
+        return dishVOList;
     }
 }
