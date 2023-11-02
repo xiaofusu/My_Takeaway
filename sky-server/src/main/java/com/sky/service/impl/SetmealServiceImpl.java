@@ -139,4 +139,15 @@ public class SetmealServiceImpl implements SetmealService {
         setmealDishMapper.deleteBatch(ids);
     }
 
+    /**
+     * 条件查询套餐
+     * @param setmeal
+     * @return
+     */
+    @Override
+    public List<Setmeal> listQuery(Setmeal setmeal) {
+        List<Setmeal> setmealList = setmealMapper.list(setmeal);
+        return setmealList;
+    }
+
 }

@@ -25,6 +25,7 @@
         </where>
         order by  s.update_time desc
     </select>
+
     <update id="update">
         update sky_take_out.setmeal
         <set>
@@ -61,4 +62,18 @@
             #{id}
         </foreach>
     </delete>
+    <select id="list" resultType="com.sky.entity.Setmeal">
+        select * from sky_take_out.setmeal
+        <where>
+            <if test="categoryId!=null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status!=null">
+                and status = #{status}
+            </if>
+            <if test="name!=null and name!=''">
+                and name like concat('%',#{name},'%')
+            </if>
+        </where>
+    </select>
 </mapper>
