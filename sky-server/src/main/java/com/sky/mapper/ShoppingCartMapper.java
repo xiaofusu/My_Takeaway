@@ -42,4 +42,10 @@ public interface ShoppingCartMapper {
      */
     @Select("select * from sky_take_out.shopping_cart where user_id = #{userId}")
     List<ShoppingCart> getListByUserId(Long userId);
+
+    /**
+     * 条件删除购物车中的菜品或套餐
+     * @param shoppingCart
+     */
+    void deleteById(ShoppingCart shoppingCart);
 }

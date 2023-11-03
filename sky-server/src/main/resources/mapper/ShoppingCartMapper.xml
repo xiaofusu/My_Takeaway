@@ -4,6 +4,7 @@
 <mapper namespace="com.sky.mapper.ShoppingCartMapper">
 
 
+
     <select id="list" resultType="com.sky.entity.ShoppingCart">
         select * from sky_take_out.shopping_cart
         <where>
@@ -25,4 +26,21 @@
         insert into sky_take_out.shopping_cart( name, image, user_id, dish_id, setmeal_id, dish_flavor, number, amount, create_time)
         values (#{name},#{image},#{userId},#{dishId},#{setmealId},#{dishFlavor},#{number},#{amount},#{createTime})
     </insert>
+    <delete id="deleteById">
+        delete from sky_take_out.shopping_cart
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="setmealId != null">
+                and setmeal_id = #{setmealId}
+            </if>
+            <if test="dishId != null">
+                and dish_id = #{dishId}
+            </if>
+            <if test="dishFlavor != null">
+                and dish_flavor = #{dishFlavor}
+            </if>
+        </where>
+    </delete>
 </mapper>
