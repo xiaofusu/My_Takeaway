@@ -8,13 +8,17 @@ import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
+import com.sky.entity.Setmeal;
 import com.sky.exception.DeletionNotAllowedException;
+import com.sky.exception.DishEnableFailedException;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
+import com.sky.vo.SetmealVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,6 +41,9 @@ public class DishServiceImpl implements DishService {
     private DishFlavorMapper dishFlavorMapper;
     @Autowired
     private SetmealDishMapper setmealDishMapper;
+
+    @Autowired
+    private SetmealMapper setmealMapper;
     /**
      * 新增菜品
      * @param dishDTO
@@ -155,6 +162,17 @@ public class DishServiceImpl implements DishService {
      */
     @Override
     public void updateStatus(Integer status, Long id) {
+       /* 这里还是有点问题的，对某个套餐内包含的菜品停售了，
+        对应的套餐还能在用户端显示。这个问题是因为你起售停售没有判断菜品在不在起售的套餐内*/
+        //1.先根据dishId从套餐菜品关联表中查询是否有套餐包含了此菜品
+       Long setmealId = setmealDishMapper.getSetmealIdByDishId(id);
+       //根据套餐id查询出套餐
+        if(setmealId!=null&&status==0) {
+            SetmealVO setmealVO = setmealMapper.getById(setmealId);
+            if(setmealVO.getStatus()==1) {
+                throw new DishEnableFailedException("在售套餐："+setmealVO.getName() + "中包含此菜品，无法停售");
+            }
+        }
         Dish dish = Dish.builder()
                 .id(id)
                 .status(status).build();

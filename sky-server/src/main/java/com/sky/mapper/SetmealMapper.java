@@ -69,4 +69,12 @@ public interface SetmealMapper {
      * @return
      */
     List<Setmeal> list(Setmeal setmeal);
+
+    /**
+     * 根据套餐id获得套餐名字
+     * @param setmealId
+     * @return
+     */
+    @Select("select name from sky_take_out.setmeal where id = #{setmealId}")
+    String getNameById(Long setmealId);
 }

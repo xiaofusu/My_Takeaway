@@ -56,5 +56,13 @@ public interface SetmealDishMapper {
     @Select("select sd.name ,sd.copies,d.image,d.description from sky_take_out.setmeal_dish sd " +
             "left join sky_take_out.dish d on d.id = sd.dish_id where sd.setmeal_id = #{setmealId}")
     List<DishItemVO> getDishItemVO(Long setmealId);
+
+    /**
+     * 根据菜品id查询对应的套餐id
+     * @param dishId
+     * @return
+     */
+    @Select("select setmeal_id from sky_take_out.setmeal_dish where dish_id=#{dishId};")
+    Long getSetmealIdByDishId(Long dishId);
 }
 
