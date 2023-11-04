@@ -73,4 +73,23 @@ public class AddressBookServiceImpl implements AddressBookService {
         addressBook.setIsDefault(StatusConstant.ENABLE);
         addressBookMapper.update(addressBook);
     }
+
+    /**
+     * 根据id删除地址
+     * @param id
+     */
+    @Override
+    public void deleteAddress(Long id) {
+        addressBookMapper.deleteById(id);
+    }
+
+    /**
+     * 获取默认地址
+     * @return
+     */
+    @Override
+    public AddressBook getDefaultAddress() {
+        AddressBook addressBook = addressBookMapper.getDefaultAddressByUserId(BaseContext.getCurrentId());
+        return addressBook;
+    }
 }
