@@ -39,4 +39,38 @@ public class AddressBookServiceImpl implements AddressBookService {
         List<AddressBook> addressBookList = addressBookMapper.list(BaseContext.getCurrentId());
         return addressBookList;
     }
+
+    /**
+     * 根据id查询地址
+     * @param id
+     * @return
+     */
+    @Override
+    public AddressBook getAddressById(Long id) {
+        AddressBook addressBook = addressBookMapper.getAddressById(id);
+        return addressBook;
+
+    }
+
+    /**
+     * 修改地址
+     * @param addressBook
+     */
+    @Override
+    public void updateAddress(AddressBook addressBook) {
+        addressBookMapper.update(addressBook);
+    }
+
+    /**
+     * 设置默认地址
+     * @param addressBook
+     */
+    @Override
+    public void setDefault(AddressBook addressBook) {
+        //将当前用户下的所有地址修改为非默认地址 update address_book set is_default = 0 where user_id = userId
+        addressBookMapper.updateIsDefaultByUserId( BaseContext.getCurrentId());
+        //将当前地址设置为默认
+        addressBook.setIsDefault(StatusConstant.ENABLE);
+        addressBookMapper.update(addressBook);
+    }
 }

@@ -3,6 +3,7 @@ package com.sky.mapper;
 import com.sky.entity.AddressBook;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -26,4 +27,25 @@ public interface AddressBookMapper {
      */
     @Select("select * from sky_take_out.address_book where user_id = #{userId}")
     List<AddressBook> list(Long userId);
+
+    /**
+     * 根据id查询地址
+     * @param id
+     * @return
+     */
+    @Select("select * from sky_take_out.address_book where id = #{id}")
+    AddressBook getAddressById(Long id);
+
+    /**
+     * 修改地址
+     * @param addressBook
+     */
+    void update(AddressBook addressBook);
+
+    /**
+     * 将当前用户下的所有地址修改为非默认地址
+     * @param userId
+     */
+    @Update("update sky_take_out.address_book set is_default = 0 where user_id = #{userId}")
+    void updateIsDefaultByUserId(Long userId);
 }

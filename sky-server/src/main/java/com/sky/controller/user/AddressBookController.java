@@ -39,4 +39,25 @@ public class AddressBookController {
         List<AddressBook> addressBookList = addressBookService.list();
         return Result.success(addressBookList);
     }
+
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询地址")
+    public Result<AddressBook> getAddressById(@PathVariable Long id){
+        AddressBook addressBook = addressBookService.getAddressById(id);
+        return Result.success(addressBook);
+    }
+    @PutMapping
+    @ApiOperation("根据id修改地址")
+    public Result updateAddress(@RequestBody AddressBook addressBook){
+        log.info("修改后的地址为：{}",addressBook);
+        addressBookService.updateAddress(addressBook);
+        return Result.success(addressBook);
+    }
+
+    @PutMapping("/default")
+    @ApiOperation("设置默认地址")
+    public Result setDefault(@RequestBody AddressBook addressBook){
+        addressBookService.setDefault(addressBook);
+        return Result.success();
+    }
 }
