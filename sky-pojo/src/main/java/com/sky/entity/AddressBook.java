@@ -53,7 +53,7 @@ public class AddressBook implements Serializable {
     //详细地址
     private String detail;
 
-    //标签
+    //标签（家 公司 学校）
     private String label;
 
     //是否默认 0否 1是
