@@ -20,7 +20,7 @@
     </insert>
 
     <update id="update" parameterType="com.sky.entity.Orders">
-        update orders
+        update sky_take_out.orders
         <set>
             <if test="cancelReason != null and cancelReason!='' ">
                 cancel_reason=#{cancelReason},

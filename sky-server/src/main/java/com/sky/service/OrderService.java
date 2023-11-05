@@ -2,8 +2,10 @@ package com.sky.service;
 
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.entity.Orders;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 
 /**
  * @Author wzy
@@ -31,4 +33,16 @@ public interface OrderService {
      */
     void paySuccess(String outTradeNo);
 
+    /**
+     * 根据id查询订单信息
+     * @param id
+     * @return
+     */
+    OrderVO getOrderDetailById(Long id);
+
+    /**
+     * 取消订单
+     * @param id
+     */
+    void cancelOrder(Long id);
 }

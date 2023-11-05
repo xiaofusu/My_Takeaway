@@ -2,6 +2,7 @@ package com.sky.controller.user;
 
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.entity.Orders;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderOverViewVO;
@@ -44,5 +45,18 @@ public class OrderController {
         //模拟交易成功 修改订单状态
         orderService.paySuccess(ordersPaymentDTO.getOrderNumber());
         return Result.success(orderPaymentVO);
+    }
+    @GetMapping("/orderDetail/{id}")
+    @ApiOperation("查询订单详情")
+    public Result<OrderVO> getOrderDetail(@PathVariable Long id){
+        log.info("订单id：{}",id);
+        OrderVO orderVO = orderService.getOrderDetailById(id);
+        return Result.success(orderVO);
+    }
+    @PutMapping("/cancel/{id}")
+    @ApiOperation("取消订单")
+    public Result canceOrder(@PathVariable Long id){
+        orderService.cancelOrder(id);
+        return Result.success();
     }
 }
