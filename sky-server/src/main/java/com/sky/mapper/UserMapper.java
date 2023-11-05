@@ -24,4 +24,12 @@ public interface UserMapper {
      * @param user
      */
     void insert(User user);
+
+    /**
+     * 根据主键id查用户
+     * @param userId
+     * @return
+     */
+    @Select("select * from sky_take_out.user where id = #{id}")
+    User getById(Long userId);
 }
