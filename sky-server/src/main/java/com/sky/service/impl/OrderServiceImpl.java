@@ -1,8 +1,11 @@
 package com.sky.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.*;
@@ -10,6 +13,7 @@ import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.OrderBusinessException;
 import com.sky.exception.ShoppingCartBusinessException;
 import com.sky.mapper.*;
+import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
@@ -24,6 +28,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author wzy
@@ -215,6 +220,52 @@ public class OrderServiceImpl implements OrderService {
         order.setCancelReason("用户取消");
         order.setCancelTime(LocalDateTime.now());
         orderMapper.update(order);
+    }
+
+    /**
+     * 分页查询历史订单
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult historyOrdersPage(OrdersPageQueryDTO ordersPageQueryDTO) {
+        //开始分页
+        PageHelper.startPage(ordersPageQueryDTO.getPage(),ordersPageQueryDTO.getPageSize());
+
+        ordersPageQueryDTO.setUserId(BaseContext.getCurrentId());//设置用户id
+        //条件查询
+        Page<Orders> page =  orderMapper.pageQuery(ordersPageQueryDTO);
+
+        List<Orders> orderList = page.getResult();
+        List<OrderVO> orderVOList = null;
+
+       orderVOList = orderList.stream().map((order -> {
+           OrderVO orderVO = new OrderVO();
+           BeanUtils.copyProperties(order,orderVO);
+           //查询订单对应的订单明细信息
+            List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(orderVO.getId());
+            orderVO.setOrderDetailList(orderDetailList);
+            return orderVO;
+        })).collect(Collectors.toList());
+        return new PageResult(page.getTotal(),orderVOList);
+    }
+
+    @Override
+    public void repetition(Long id) {
+        //查询出此订单的订单详情数据
+        List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(id);
+
+        //将订单详情对象转为购物车对象
+        List<ShoppingCart> shoppingCartList = orderDetailList.stream().map(orderDetail -> {
+            ShoppingCart shoppingCart = new ShoppingCart();
+            BeanUtils.copyProperties(orderDetail, shoppingCart,"id");
+            shoppingCart.setUserId(BaseContext.getCurrentId());
+            shoppingCart.setCreateTime(LocalDateTime.now());
+            return shoppingCart;
+        }).collect(Collectors.toList());
+
+        shoppingCartMapper.insertBatch(shoppingCartList);
+
     }
 
 }
