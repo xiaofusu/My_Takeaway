@@ -17,6 +17,7 @@ import com.sky.result.PageResult;
 import com.sky.service.OrderService;
 import com.sky.utils.WeChatPayUtil;
 import com.sky.vo.OrderPaymentVO;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import org.springframework.beans.BeanUtils;
@@ -295,7 +296,6 @@ public class OrderServiceImpl implements OrderService {
 
         return new PageResult(ordersPage.getTotal(),orderVOList);
     }
-
     /**
      * 据订单id获取菜品信息字符串
      * @param order
@@ -312,6 +312,24 @@ public class OrderServiceImpl implements OrderService {
             orderDishes.append(dishName + "*" + number + " ");
         });
         return orderDishes;
+    }
+
+    /**
+     * 获取订单各个状态的数量
+     * @return
+     */
+    @Override
+    public OrderStatisticsVO GetStatistics() {
+        //根据状态分别查询出待接单、待派送、派送中的订单数量
+        Integer number1 = orderMapper.getCountByStatus(Orders.TO_BE_CONFIRMED);//待接单数量
+        Integer number2 = orderMapper.getCountByStatus(Orders.CONFIRMED);//已接单数量
+        Integer number3 = orderMapper.getCountByStatus(Orders.DELIVERY_IN_PROGRESS);//待接单数量
+
+        OrderStatisticsVO orderStatisticsVO = new OrderStatisticsVO();
+        orderStatisticsVO.setToBeConfirmed(number1);
+        orderStatisticsVO.setConfirmed(number2);
+        orderStatisticsVO.setDeliveryInProgress(number3);
+        return orderStatisticsVO;
     }
 
 }
