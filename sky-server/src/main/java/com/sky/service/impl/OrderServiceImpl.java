@@ -268,4 +268,50 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    /**
+     * 分页条件搜索订单
+     * @param ordersPageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult pageConditionSearch(OrdersPageQueryDTO ordersPageQueryDTO) {
+        //开始分页查询
+        PageHelper.startPage(ordersPageQueryDTO.getPage(),ordersPageQueryDTO.getPageSize());
+        //查询订单信息
+        Page<Orders> ordersPage = orderMapper.pageQuery(ordersPageQueryDTO);
+        //订单包含的菜品，以字符串形式展示 返回OrderVO对象
+        List<Orders> ordersList = ordersPage.getResult();
+        List<OrderVO> orderVOList = new ArrayList<>();
+        if(ordersList!=null&&ordersList.size()>0){
+           orderVOList = ordersList.stream().map((order -> {
+                OrderVO orderVO = new OrderVO();
+                BeanUtils.copyProperties(order, orderVO);
+               StringBuffer orderDishes = getStringBuffer(order);//据订单id获取菜品信息字符串
+               orderVO.setOrderDishes(String.valueOf(orderDishes));
+                return orderVO;
+
+            })).collect(Collectors.toList());
+        }
+
+        return new PageResult(ordersPage.getTotal(),orderVOList);
+    }
+
+    /**
+     * 据订单id获取菜品信息字符串
+     * @param order
+     * @return
+     */
+    private StringBuffer getStringBuffer(Orders order) {
+        //根据orderId查询相应的订单详情表中的菜品信息
+        List<OrderDetail> orderDetailList = orderDetailMapper.getByOrderId(order.getId());
+        //遍历菜品集合 获得菜品名字 然后拼接成字符串
+        StringBuffer orderDishes = new StringBuffer();
+        orderDetailList.forEach(orderDetail -> {
+            String dishName = orderDetail.getName();//菜品名字
+            Integer number = orderDetail.getNumber();//菜品数量
+            orderDishes.append(dishName + "*" + number + " ");
+        });
+        return orderDishes;
+    }
+
 }
