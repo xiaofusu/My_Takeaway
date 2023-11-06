@@ -349,6 +349,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void rejection(OrdersRejectionDTO ordersRejectionDTO) {
 
+        // 根据id查询订单
+        Orders ordersDB = orderMapper.getById(ordersRejectionDTO.getId());
+
+        // 订单只有存在且状态为2（待接单）才可以拒单
+        if (ordersDB == null || !ordersDB.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
 
 //        //支付状态
 //        Integer payStatus = ordersDB.getPayStatus();
@@ -368,6 +375,24 @@ public class OrderServiceImpl implements OrderService {
                 .cancelReason(ordersRejectionDTO.getRejectionReason())
                 .cancelTime(LocalDateTime.now()).build();
         orderMapper.update(order);
+    }
+
+    /**
+     * 订单派送
+     * @param id
+     */
+    @Override
+    public void delivery(Long id) {
+        // 根据id查询订单
+        Orders ordersDB = orderMapper.getById(id);
+
+        // 校验订单是否存在，并且状态为3
+        if (ordersDB == null || !ordersDB.getStatus().equals(Orders.CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        Orders orders = Orders.builder().id(id)
+                .status(Orders.DELIVERY_IN_PROGRESS).build();
+        orderMapper.update(orders);
     }
 
 }

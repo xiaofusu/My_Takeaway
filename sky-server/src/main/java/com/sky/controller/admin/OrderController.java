@@ -57,5 +57,12 @@ public class OrderController {
         orderService.rejection(ordersRejectionDTO);
         return Result.success();
     }
+    @PutMapping("/delivery/{id}")
+    @ApiOperation("商家派送订单")
+    public Result delivery(@PathVariable Long id){
+        orderService.delivery(id);
+        return Result.success();
+    }
+
 
 }
