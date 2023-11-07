@@ -18,6 +18,12 @@ sky:
   wechat:
     appid: wx34addf843a6b8f31
     secret: 1564794135698bbf5d6fbf28afb827dc
+
+  shop:
+    address: 淮南市田家庵区安徽理工大学
+
+  baidu:
+    ak: **************************
 #    mchid:
 #    mchSerialNo:
 #    privateKeyFilePath:
