@@ -2,7 +2,7 @@ sky:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     host: localhost
-    port: 3306
+    port: 3306git
     database: sky_take_out
     username: root
     password: 295456
@@ -10,7 +10,7 @@ sky:
     access-key-id: LTAI5tJr8bhLfrnnSExaRzij
     endpoint: oss-cn-hangzhou.aliyuncs.com
     bucket-name: wzy-sky-takeaway
-    access-key-secret: *********************
+    access-key-secret: ******************
   redis:
     host: 192.168.163.128
     port: 6379
@@ -23,7 +23,7 @@ sky:
     address: 淮南市田家庵区安徽理工大学
 
   baidu:
-    ak: **************************
+    ak: *******************
 #    mchid:
 #    mchSerialNo:
 #    privateKeyFilePath:

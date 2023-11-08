@@ -21,6 +21,7 @@ import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
+import com.sky.websocket.WebSocketServer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,6 +53,8 @@ public class OrderServiceImpl implements OrderService {
     private ShoppingCartMapper shoppingCartMapper;//购物车
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private WebSocketServer webSocketServer;
 //    @Autowired
 //    private WeChatPayUtil weChatPayUtil;
     @Value("${sky.shop.address}")
@@ -172,6 +175,15 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         orderMapper.update(orders);
+
+        //通过websocket向客户端浏览器推送消息  type orderId content
+        HashMap hashMap = new HashMap();
+        hashMap.put("type",1);//1表示来单提醒 2.表示用户催单
+        hashMap.put("orderId",ordersDB.getId());
+        hashMap.put("content","订单号："+outTradeNo);
+
+        String jsonString = JSON.toJSONString(hashMap);
+        webSocketServer.sendToAllClient(jsonString);
     }
 
     /**
@@ -456,6 +468,27 @@ public class OrderServiceImpl implements OrderService {
                 .deliveryTime(LocalDateTime.now())
                 .build();
         orderMapper.update(order);
+    }
+
+    /**
+     * 用户催单
+     * @param id
+     */
+    @Override
+    public void reminder(Long id) {
+        //根据id查询订单
+        Orders orderDB = orderMapper.getById(id);
+        if(orderDB==null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);                     
+        }
+        HashMap hashMap = new HashMap();
+        //通过websocket向客户端浏览器推送消息  type orderId content
+        hashMap.put("type",2);
+        hashMap.put("orderId",id);
+        hashMap.put("content","订单号："+orderDB.getNumber());
+        String jsonString = JSON.toJSONString(hashMap);
+        webSocketServer.sendToAllClient(jsonString);
+
     }
 
     /**
