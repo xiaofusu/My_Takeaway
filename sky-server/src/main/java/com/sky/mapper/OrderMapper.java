@@ -1,6 +1,7 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.dto.GoodsSalesDTO;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import com.sky.vo.OrderVO;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author wzy
@@ -74,5 +76,20 @@ public interface OrderMapper {
      * @param map
      * @return
      */
-    BigDecimal sumAmoutByMap(HashMap map);
+    BigDecimal sumAmoutByMap(Map map);
+
+    /**
+     * 根据条件查询订单数目
+     * @param map
+     * @return
+     */
+    Integer getCountByMap(Map map);
+
+    /**
+     * 获得销量top10
+     * @param map
+     * @return
+     */
+   List<GoodsSalesDTO> getSaleTop10(Map map);
+
 }
