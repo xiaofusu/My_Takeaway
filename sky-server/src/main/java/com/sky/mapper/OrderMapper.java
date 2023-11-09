@@ -8,7 +8,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -60,10 +62,17 @@ public interface OrderMapper {
     Integer getCountByStatus(Integer status);
 
     /**
-     *
-     * @param deliveryInProgress
+     *查询昨天处于派送中还未完成的订单
+     * @param status
      * @param now
      */
     @Select("select * from sky_take_out.orders where status = #{status} and order_time < #{now}")
     List<Orders> getByStatusAndOrderTimeLT(Integer status, LocalDateTime now);
+
+    /**
+     * 动态查询营业额数据
+     * @param map
+     * @return
+     */
+    BigDecimal sumAmoutByMap(HashMap map);
 }

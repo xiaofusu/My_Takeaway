@@ -4,6 +4,9 @@ import com.sky.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Author wzy
  * @Date 2023/11/1 14:13
@@ -32,4 +35,11 @@ public interface UserMapper {
      */
     @Select("select * from sky_take_out.user where id = #{id}")
     User getById(Long userId);
+
+    /**
+     * 条件查询用户数量
+     * @param map
+     * @return
+     */
+    Integer getCountByMap(Map map);
 }
