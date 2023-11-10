@@ -1,11 +1,15 @@
 package com.sky.service.impl;
 
 import com.sky.entity.Orders;
+import com.sky.mapper.DishMapper;
 import com.sky.mapper.OrderMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.WorkSpaceService;
 import com.sky.vo.BusinessDataVO;
+import com.sky.vo.DishOverViewVO;
 import com.sky.vo.OrderOverViewVO;
+import com.sky.vo.SetmealOverViewVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +30,10 @@ public class WorkSpaceServiceImpl implements WorkSpaceService {
     private OrderMapper orderMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private DishMapper dishMapper;
+    @Autowired
+    private SetmealMapper setmealMapper;
     /**
      * 查询当天订单管理数据
      * @return
@@ -101,6 +109,42 @@ public class WorkSpaceServiceImpl implements WorkSpaceService {
                 .orderCompletionRate(orderCompletionRate)
                 .unitPrice(unitPrice)
                 .newUsers(newUsers)
+                .build();
+    }
+
+    /**
+     * 查询菜品总览
+     * @return
+     */
+    @Override
+    public DishOverViewVO getOverviewDishes() {
+        // 已启售数量
+        Integer sold = dishMapper.countByStatus(1);
+
+        // 已停售数量
+        Integer discontinued = dishMapper.countByStatus(0);
+
+        return DishOverViewVO.builder()
+                .sold(sold)
+                .discontinued(discontinued)
+                .build();
+    }
+
+    /**
+     * 套餐总览 查询起售 停售数量
+     * @return
+     */
+    @Override
+    public SetmealOverViewVO getOverviewSetmeals() {
+        // 已启售数量
+        Integer sold = setmealMapper.countByStatus(1);
+
+        // 已停售数量
+        Integer discontinued = setmealMapper.countByStatus(0);
+
+        return SetmealOverViewVO.builder()
+                .sold(sold)
+                .discontinued(discontinued)
                 .build();
     }
 }

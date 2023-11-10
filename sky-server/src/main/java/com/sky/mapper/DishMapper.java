@@ -82,4 +82,12 @@ public interface DishMapper {
      * @return
      */
     List<Dish> list(Dish dish);
+
+    /**
+     * 根据菜品状态统计数量
+     * @param status
+     * @return
+     */
+    @Select("select count(id) from sky_take_out.dish where status = #{status}")
+    Integer countByStatus(int status);
 }

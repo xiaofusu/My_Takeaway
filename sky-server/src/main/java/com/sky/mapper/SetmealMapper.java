@@ -77,4 +77,12 @@ public interface SetmealMapper {
      */
     @Select("select name from sky_take_out.setmeal where id = #{setmealId}")
     String getNameById(Long setmealId);
+
+    /**
+     * 根据状态查询套餐数量
+     * @param status
+     * @return
+     */
+    @Select("select count(id) from sky_take_out.setmeal where status  = #{status}")
+    Integer countByStatus(int status);
 }
