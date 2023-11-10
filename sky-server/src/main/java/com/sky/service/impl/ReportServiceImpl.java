@@ -110,7 +110,7 @@ public class ReportServiceImpl implements ReportService {
             Integer totalUser = userMapper.getCountByMap(map);
             totalUserList.add(totalUser);
 
-            //统计每天新增数量：select count(id) from user where create_time > beginTime and create_time < endTime
+            //统计每天新增数量：select count(id) from user where create_time > beginTim,.e and create_time < endTime
             map.put("begin",beginTime);
             Integer newUser = userMapper.getCountByMap(map);
             newUserList.add(newUser);
