@@ -78,9 +78,10 @@ public class WorkSpaceServiceImpl implements WorkSpaceService {
      * @return
      */
     @Override
-    public BusinessDataVO getBusinessData() {
+    public BusinessDataVO getBusinessData(LocalDateTime begin,LocalDateTime end) {
         Map map = new HashMap();
-        map.put("begin",LocalDateTime.now().with(LocalTime.MIN));//当前时间(今日零点）
+        map.put("begin",begin);//当前时间(今日零点0:00）
+        map.put("end",end);//当前时间(）
         //查询总订单数
         Integer totalOrderCount = orderMapper.getCountByMap(map);
 
@@ -96,7 +97,7 @@ public class WorkSpaceServiceImpl implements WorkSpaceService {
         Double orderCompletionRate = 0.0;
         //private Double unitPrice;//平均客单价 营业额 / 有效订单数
         Double unitPrice = 0.0;
-        if(totalOrderCount!=0){
+        if(totalOrderCount!=0 && validOrderCount != 0){
             orderCompletionRate = validOrderCount.doubleValue()/totalOrderCount;
             unitPrice = turnover.doubleValue()/validOrderCount;
         }
