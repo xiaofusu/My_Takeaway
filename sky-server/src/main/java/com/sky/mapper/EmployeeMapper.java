@@ -50,4 +50,12 @@ public interface EmployeeMapper {
 
     @Select("select id,username,name,phone,sex,id_number from sky_take_out.employee where id = #{id}")
     EmployeeDTO getById(Long id);
+
+    /**
+     * 根据id查询密码
+     * @param id
+     * @return
+     */
+    @Select("select password from sky_take_out.employee where id = #{id}")
+    String getPasswordById(Long id);
 }

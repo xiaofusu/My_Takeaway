@@ -10,6 +10,7 @@ import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
@@ -150,6 +151,37 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDTO getById(Long id) {
        EmployeeDTO employeeDTO =  employeeMapper.getById(id);
         return employeeDTO;
+    }
+
+    /**
+     *  修改密码
+     * @param passwordEditDTO
+     */
+    @Override
+    public void editPassword(PasswordEditDTO passwordEditDTO) {
+
+            String newPassword = DigestUtils.md5DigestAsHex(passwordEditDTO.getNewPassword().getBytes());
+            Employee employee = Employee.builder().id(BaseContext.getCurrentId())
+                    .password(newPassword).build();
+            //修改密码
+            employeeMapper.update(employee);
+    }
+
+    /**
+     * 验证原密码是否输入正确
+     * @param passwordEditDTO
+     */
+    @Override
+    public void oldPassword(PasswordEditDTO passwordEditDTO) {
+        //1.验证输入的原密码是否和从数据库中查询的一致 如果不一致 抛出异常
+        Long empId = BaseContext.getCurrentId();//员工id
+        //根据员工id查询密码
+        String password = employeeMapper.getPasswordById(empId);
+        //因为此密码是加密后存入数据库的 所以得先将原密码加密之后才可以比较
+        String oldPassword = DigestUtils.md5DigestAsHex(passwordEditDTO.getOldPassword().getBytes());
+        if(!oldPassword.equals(password)){
+            throw new PasswordErrorException("原密码输入错误");
+        }
     }
 
 }
