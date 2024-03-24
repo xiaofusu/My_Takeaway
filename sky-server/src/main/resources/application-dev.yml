@@ -7,17 +7,17 @@ sky:
     username: root
     password: 295456
   alioss:
-    access-key-id: LTAI5tJr8bhLfrnnSExaRzij
-    endpoint: oss-cn-hangzhou.aliyuncs.com
-    bucket-name: wzy-sky-takeaway
+    access-key-id: ****************
+    endpoint: *************
+    bucket-name: ***********
     access-key-secret: *******************
   redis:
     host: 192.168.163.128
     port: 6379
     password: 295456
   wechat:
-    appid: wx34addf843a6b8f31
-    secret: 1564794135698bbf5d6fbf28afb827dc
+    appid: *************
+    secret: ****************
 
   shop:
     address: 淮南市田家庵区安徽理工大学
